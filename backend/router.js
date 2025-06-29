@@ -307,6 +307,13 @@ router.post("/register", async (req, res) => {
     });
 
     if (authError) throw authError;
+    if (authData.confirmation_sent_at !== "")
+      res
+        .status(500)
+        .json({
+          error:
+            "На почту было отправлено письмо, после подтверждения следует перейти на страницу логина",
+        });
 
     // 2. Сохранение профиля в отдельной таблице (если нужно)
     if (authData.user) {
@@ -322,7 +329,7 @@ router.post("/register", async (req, res) => {
 
       if (profileError) throw profileError;
     }
-
+    console.log("authData", authData);
     res.status(200).json(authData);
   } catch (e) {
     res.status(500).json({ error: e.message });
