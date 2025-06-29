@@ -38,7 +38,7 @@ function App() {
     getPosts();
   }, [isGlobalSearch]);
   return (
-    <div className="flex justify-between gap-[20px] md:flex-wrap">
+    <div className="flex justify-between gap-[20px] max-md:flex-wrap-reverse">
       <div className="flex w-full flex-col gap-[10px] ">
         {!isLoading && data.length === 0 && <p>Нет постов, увы</p>}
         {!isLoading &&
@@ -58,7 +58,7 @@ function App() {
             );
           })}
       </div>
-      <div className="flex flex-col gap-[10px] sticky top-0 w-full max-w-[380px]">
+      <div className="flex flex-col gap-[10px] sticky top-0 w-full max-w-[380px] max-md:max-w-full">
         <p>
           {JSON.parse(localStorage.getItem("yourMeta") ?? "{}")?.data?.session
             ?.user?.user_metadata?.first_name ?? ""}{" "}
