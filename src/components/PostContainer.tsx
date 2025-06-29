@@ -233,10 +233,10 @@ export const PostContainer = ({
               {updatedPost.tags.map((tag: string, index: number) => {
                 return (
                   <p
-                    className="p-[1px] max-w-[100px] truncate  border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="px-[10px] max-w-[100px] truncate  border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     key={index}
                   >
-                    {tag}11111111111111111
+                    {tag}
                   </p>
                 );
               })}
