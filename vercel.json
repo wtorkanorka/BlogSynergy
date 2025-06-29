@@ -5,7 +5,6 @@
       "src": "backend/index.js",
       "use": "@vercel/node"
     },
-
     {
       "src": "package.json",
       "use": "@vercel/static-build",
@@ -14,30 +13,25 @@
       }
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "backend/index.js",
-      "methods": ["GET", "POST", "PUT", "DELETE"]
-    },
-
-    {
-      "src": "/static/(.*)",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-
-    {
-      "src": "/(.*)",
-      "dest": "/index.html",
-      "status": 200
-    }
-  ],
   "rewrites": [
     {
       "source": "/(.*)",
+      "destination": "backend/index.js"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }
