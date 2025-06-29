@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+* {
+  transition: 0.5s;
+  box-sizing: border-box;
+}
+
+textarea {
+  transition: 0s;
+}
