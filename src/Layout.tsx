@@ -25,7 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, []);
 
   const calculatePosition = (offset: number) => {
-    const radius = 45;
+    const radius = 50;
     const currentAngle = (angle + offset) % 360;
     const rad = (currentAngle * Math.PI) / 180;
     return {
