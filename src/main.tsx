@@ -13,7 +13,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   // const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  axios.defaults.baseURL = "https://blog-synergy.vercel.app";
+  // axios.defaults.baseURL = "https://blog-synergy.vercel.app";
 
   useEffect(() => {
     const checkAuth = async () => {
