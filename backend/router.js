@@ -4,10 +4,10 @@ import { v4 as uuidv4 } from "uuid";
 
 const router = new Router();
 
-const supabaseUrl = "https://bkpoehpfhwendzbcmzuf.supabase.co";
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcG9laHBmaHdlbmR6YmNtenVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxNTg4MjEsImV4cCI6MjA2NTczNDgyMX0.nViaDaNuPGOVlUqSKBUTzMaBFBcjj97Ik8I_5cmaB1c";
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 export async function authMiddleware(req, res, next) {
   try {
@@ -308,12 +308,10 @@ router.post("/register", async (req, res) => {
 
     if (authError) throw authError;
     if (authData.confirmation_sent_at !== "")
-      res
-        .status(500)
-        .json({
-          error:
-            "На почту было отправлено письмо, после подтверждения следует перейти на страницу логина",
-        });
+      res.status(500).json({
+        error:
+          "На почту было отправлено письмо, после подтверждения следует перейти на страницу логина",
+      });
 
     // 2. Сохранение профиля в отдельной таблице (если нужно)
     if (authData.user) {
