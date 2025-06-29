@@ -2,8 +2,8 @@
   "version": 2,
   "build": {
     "env": {
-      "SUPABASE_URL": "@supabase_url",
-      "SUPABASE_ANON_KEY": "@supabase_anon_key"
+      "SUPABASE_URL": "@SUPABASE_URL",
+      "SUPABASE_ANON_KEY": "@sSUPABASE_ANON_KEY"
     }
   },
   "builds": [
