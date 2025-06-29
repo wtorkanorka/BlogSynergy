@@ -38,7 +38,7 @@ function App() {
     getPosts();
   }, [isGlobalSearch]);
   return (
-    <div className="flex justify-between gap-[20px]">
+    <div className="flex justify-between gap-[20px] md:flex-wrap">
       <div className="flex w-full flex-col gap-[10px] ">
         {!isLoading && data.length === 0 && <p>Нет постов, увы</p>}
         {!isLoading &&
