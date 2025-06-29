@@ -46,7 +46,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const verifySession = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/session");
+        const response = await axios.get("/session");
 
         if (response.data?.session) {
           setIsAuthenticated(true);
