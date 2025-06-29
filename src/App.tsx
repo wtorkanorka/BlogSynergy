@@ -58,7 +58,7 @@ function App() {
             );
           })}
       </div>
-      <div className="flex flex-col gap-[10px] sticky top-0 w-full max-w-[380px] max-md:max-w-full">
+      <div className="flex flex-col gap-[10px] sticky max-md:relative top-0 w-full max-w-[380px] max-md:max-w-full">
         <p>
           {JSON.parse(localStorage.getItem("yourMeta") ?? "{}")?.data?.session
             ?.user?.user_metadata?.first_name ?? ""}{" "}
