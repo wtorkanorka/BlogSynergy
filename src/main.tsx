@@ -13,10 +13,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   // const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  // axios.defaults.baseURL =
-  //   process.env.NODE_ENV === "development"
-  //     ? "http://localhost:5000" // Для разработки
-  //     : "https://blog-synergy.vercel.app"; // Для продакшена
+  axios.defaults.baseURL =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:5000" // Для разработки
+      : "https://blog-synergy.vercel.app"; // Для продакшена
 
   useEffect(() => {
     const checkAuth = async () => {
