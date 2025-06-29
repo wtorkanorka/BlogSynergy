@@ -322,7 +322,7 @@ router.post("/register", async (req, res) => {
       if (profileError) throw profileError;
     }
 
-    res.status(201).json(authData);
+    res.status(200).json(authData);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
