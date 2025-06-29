@@ -18,7 +18,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/session");
+        const response = await axios.get("/session");
         // setSession(response.data?.data?.session);
         return response;
       } catch (error) {
