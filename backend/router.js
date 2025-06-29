@@ -288,6 +288,7 @@ router.delete("/posts/:id", authMiddleware, async (req, res) => {
     });
   }
 });
+
 router.post("/register", async (req, res) => {
   try {
     const { email, password, firstName, lastName } = req.body;
