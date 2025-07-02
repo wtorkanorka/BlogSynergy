@@ -11,13 +11,12 @@ const supabase = createClient(
 );
 
 export async function authMiddleware(req, res, next) {
-  console.log("req", req);
   try {
     const {
       data: { session },
     } = await supabase.auth.getSession();
 
-    if (!session) {
+    if (!session.access_token) {
       return res.status(401).json({ error: "Not authenticated" });
     }
 
@@ -28,7 +27,7 @@ export async function authMiddleware(req, res, next) {
   }
 }
 
-router.post("/posts", authMiddleware, async (req, res) => {
+router.post("/posts", async (req, res) => {
   try {
     if (!req.body) {
       res.status(404).json({ message: "Не хватает полей в пост запросе" });
@@ -47,7 +46,7 @@ router.post("/posts", authMiddleware, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-router.get("/posts", authMiddleware, async (req, res) => {
+router.get("/posts", async (req, res) => {
   const { range = 9, nonGlobal } = req.query;
 
   try {
@@ -92,7 +91,7 @@ router.get("/posts", authMiddleware, async (req, res) => {
   }
 });
 
-router.get("/posts/:id", authMiddleware, async (req, res) => {
+router.get("/posts/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { data: post, error } = await supabase
@@ -107,11 +106,11 @@ router.get("/posts/:id", authMiddleware, async (req, res) => {
   }
 });
 
-router.post("/posts/comments/:postId", authMiddleware, async (req, res) => {
+router.post("/posts/comments/:postId", async (req, res) => {
   try {
     const { postId } = req.params;
-    const { content } = req.body;
-    const currentUser = req.user;
+    const { content, userId, firstName, lastName } = req.body;
+    const currentUser = userId;
 
     // 1. Валидация
     if (!content?.trim()) {
@@ -121,9 +120,9 @@ router.post("/posts/comments/:postId", authMiddleware, async (req, res) => {
     // 2. Подготовка комментария
     const newComment = {
       id: uuidv4(),
-      userId: currentUser.id,
-      authorFirstName: currentUser.user_metadata?.first_name || "Anonymous",
-      authorLastName: currentUser.user_metadata?.last_name || "",
+      userId: currentUser,
+      authorFirstName: firstName || "Anonymous",
+      authorLastName: lastName || "",
       content: content.trim(),
       createdAt: new Date().toISOString(),
     };
@@ -168,18 +167,18 @@ router.post("/posts/comments/:postId", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("Final error:", {
       params: req.params,
-      error: error.message,
+      error: error,
       code: error.code,
     });
 
     return res.status(500).json({
       error: "Failed to add comment",
-      details: process.env.NODE_ENV === "development" ? error.message : null,
+      details: error.message,
     });
   }
 });
 
-router.put("/posts/:id", authMiddleware, async (req, res) => {
+router.put("/posts/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { title, content, isPrivate, tags } = req.body;
@@ -232,7 +231,7 @@ router.put("/posts/:id", authMiddleware, async (req, res) => {
     });
   }
 });
-router.delete("/posts/:id", authMiddleware, async (req, res) => {
+router.delete("/posts/:id", async (req, res) => {
   try {
     const { id } = req.params; // Получаем ID из URL параметров
 
@@ -425,15 +424,8 @@ router.get("/subscriptions/:id", async (req, res) => {
   }
 });
 
-router.post("/subscriptions", authMiddleware, async (req, res) => {
+router.post("/subscriptions", async (req, res) => {
   const { owner, subscriber } = req.body;
-
-  // Проверяем, что текущий пользователь - это подписчик
-  if (req.user.id !== subscriber.userId) {
-    return res
-      .status(403)
-      .json({ error: "You can only subscribe as yourself" });
-  }
 
   try {
     // 1. Находим запись owner в таблице Subscriptions
@@ -498,7 +490,7 @@ router.post("/subscriptions", authMiddleware, async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
-router.delete("/subscriptions", authMiddleware, async (req, res) => {
+router.delete("/subscriptions", async (req, res) => {
   const { owner, subscriber } = req.body;
 
   // Проверяем, что текущий пользователь - это подписчик
