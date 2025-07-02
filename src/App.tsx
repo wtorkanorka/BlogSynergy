@@ -14,13 +14,18 @@ function App() {
   const [data, setData] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isGlobalSearch, setIsGlobalSearch] = useState(true);
+  const userId = JSON.parse(localStorage.getItem("yourMeta") ?? "{}")?.data
+    ?.user?.id;
+
   const navigate = useNavigate();
 
   async function getPosts() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `/posts?range=100${!isGlobalSearch ? "&nonGlobal=true" : ""}`
+        `/posts?range=100${
+          !isGlobalSearch ? `&nonGlobal=true&userId=${userId}` : ""
+        }`
       );
       const data = response.data;
 

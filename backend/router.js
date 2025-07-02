@@ -5,9 +5,10 @@ import { v4 as uuidv4 } from "uuid";
 const router = new Router();
 
 const supabase = createClient(
-  process.env.SUPABASE_URL,
+  process.env.SUPABASE_URL || "https://bkpoehpfhwendzbcmzuf.supabase.co",
 
-  process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_ANON_KEY ||
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcG9laHBmaHdlbmR6YmNtenVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAxNTg4MjEsImV4cCI6MjA2NTczNDgyMX0.nViaDaNuPGOVlUqSKBUTzMaBFBcjj97Ik8I_5cmaB1c"
 );
 
 export async function authMiddleware(req, res, next) {
@@ -47,7 +48,7 @@ router.post("/posts", async (req, res) => {
   }
 });
 router.get("/posts", async (req, res) => {
-  const { range = 9, nonGlobal } = req.query;
+  const { range = 9, nonGlobal, userId } = req.query;
 
   try {
     if (nonGlobal === "true") {
@@ -59,9 +60,10 @@ router.get("/posts", async (req, res) => {
         res.status(500).json(error);
         throw error;
       }
+
       const subscribedOnOwner = subscriptions.filter((subscriptions) => {
         return subscriptions.subscribers !== null
-          ? subscriptions.subscribers.some((elem) => elem.userId == req.user.id)
+          ? subscriptions.subscribers.some((elem) => elem.userId == userId)
           : false;
       });
       const ownerUserIds = subscribedOnOwner.map((sub) => sub.owner.userId);
