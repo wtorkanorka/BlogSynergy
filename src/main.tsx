@@ -50,7 +50,10 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     ?.session?.access_token;
   useEffect(() => {
     const verifySession = async () => {
-      if (token) return;
+      if (token) {
+        setIsAuthenticated(true);
+        return;
+      }
       try {
         const response = await axios.get("/session");
 
