@@ -11,6 +11,7 @@ const supabase = createClient(
 );
 
 export async function authMiddleware(req, res, next) {
+  console.log("req", req);
   try {
     const {
       data: { session },
