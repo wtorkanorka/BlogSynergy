@@ -46,14 +46,10 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  const token = JSON.parse(localStorage.getItem("yourMeta") ?? "{}")?.data
-    ?.session?.access_token;
+  // const token = JSON.parse(localStorage.getItem("yourMeta") ?? "{}")?.data
+  //   ?.session?.access_token;
   useEffect(() => {
     const verifySession = async () => {
-      if (token) {
-        setIsAuthenticated(true);
-        return;
-      }
       try {
         const response = await axios.get("/session");
 
