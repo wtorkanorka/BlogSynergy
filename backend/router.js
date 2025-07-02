@@ -13,15 +13,19 @@ const supabase = createClient(
 export async function authMiddleware(req, res, next) {
   console.log("req", req);
   try {
+    // const {
+    //   data: { session },
+    // } = await supabase.auth.getSession();
     const {
-      data: { session },
-    } = await supabase.auth.getSession();
+      data: { user, session },
+      error,
+    } = await supabase.auth.refreshSession();
 
     if (!session) {
       return res.status(401).json({ error: "Not authenticated" });
     }
 
-    req.user = session.user;
+    // req.user = session.user;
     next();
   } catch (e) {
     res.status(500).json({ error: e.message });
