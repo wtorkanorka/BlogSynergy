@@ -339,9 +339,6 @@ router.post("/register", async (req, res) => {
 // Вход
 router.post("/login", async (req, res) => {
   try {
-    const { error: logoutError } = await supabase.auth.signOut();
-
-    if (logoutError) throw logoutError;
     const { email, password } = req.body;
 
     const { data, error } = await supabase.auth.signInWithPassword({
