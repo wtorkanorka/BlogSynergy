@@ -236,6 +236,7 @@ router.put("/posts/:id", async (req, res) => {
 router.delete("/posts/:id", async (req, res) => {
   try {
     const { id } = req.params; // Получаем ID из URL параметров
+    const { userId } = req.query;
 
     // 1. Проверяем авторизацию пользователя
     // const {
@@ -261,10 +262,10 @@ router.delete("/posts/:id", async (req, res) => {
     }
 
     // 3. Проверяем права доступа (либо автор, либо админ)
-    const isAuthor = post.authorId === session.user.id;
-    const isAdmin = session.user.user_metadata?.role === "admin";
+    const isAuthor = post.authorId === userId;
+    // const isAdmin = session.user.user_metadata?.role === "admin";
 
-    if (!isAuthor && !isAdmin) {
+    if (!isAuthor) {
       return res.status(403).json({
         error: "Forbidden: You can only delete your own posts",
       });
