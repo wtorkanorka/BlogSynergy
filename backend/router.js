@@ -238,15 +238,15 @@ router.delete("/posts/:id", async (req, res) => {
     const { id } = req.params; // Получаем ID из URL параметров
 
     // 1. Проверяем авторизацию пользователя
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
+    // const {
+    //   data: { session },
+    //   error: sessionError,
+    // } = await supabase.auth.getSession();
 
-    if (sessionError) throw sessionError;
-    if (!session) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
+    // if (sessionError) throw sessionError;
+    // if (!session) {
+    //   return res.status(401).json({ error: "Not authenticated" });
+    // }
 
     // 2. Проверяем существование поста
     const { data: post, error: findError } = await supabase
