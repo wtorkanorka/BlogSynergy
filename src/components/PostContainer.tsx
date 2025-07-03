@@ -68,7 +68,7 @@ export const PostContainer = ({
 
   async function deletePost(id: string) {
     try {
-      const data = await axios.delete(`/posts/${id}?yourId=${yourId}`);
+      const data = await axios.delete(`/posts/${id}`);
       if (data.status == 200) {
         location.reload();
       }

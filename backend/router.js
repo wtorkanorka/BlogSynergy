@@ -236,18 +236,17 @@ router.put("/posts/:id", async (req, res) => {
 router.delete("/posts/:id", async (req, res) => {
   try {
     const { id } = req.params; // Получаем ID из URL параметров
-    const { userId } = req.query;
 
     // 1. Проверяем авторизацию пользователя
-    // const {
-    //   data: { session },
-    //   error: sessionError,
-    // } = await supabase.auth.getSession();
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
 
-    // if (sessionError) throw sessionError;
-    // if (!session) {
-    //   return res.status(401).json({ error: "Not authenticated" });
-    // }
+    if (sessionError) throw sessionError;
+    if (!session) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
 
     // 2. Проверяем существование поста
     const { data: post, error: findError } = await supabase
@@ -262,10 +261,10 @@ router.delete("/posts/:id", async (req, res) => {
     }
 
     // 3. Проверяем права доступа (либо автор, либо админ)
-    const isAuthor = post.authorId === userId;
-    // const isAdmin = session.user.user_metadata?.role === "admin";
+    const isAuthor = post.authorId === session.user.id;
+    const isAdmin = session.user.user_metadata?.role === "admin";
 
-    if (!isAuthor) {
+    if (!isAuthor && !isAdmin) {
       return res.status(403).json({
         error: "Forbidden: You can only delete your own posts",
       });
