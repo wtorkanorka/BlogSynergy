@@ -310,27 +310,36 @@ router.post("/register", async (req, res) => {
     });
 
     if (authError) throw authError;
+
     if (authData.confirmation_sent_at !== "")
       res.status(500).json({
         error:
           "На почту было отправлено письмо, после подтверждения следует перейти на страницу логина",
       });
 
-    // 2. Сохранение профиля в отдельной таблице (если нужно)
-    if (authData.user) {
-      const { error: profileError } = await supabase.from("profiles").insert([
-        {
-          id: authData.user.id,
-          email: authData.user.email,
-          first_name: firstName,
-          last_name: lastName,
-          created_at: new Date().toISOString(),
-        },
-      ]);
+    if (authData.user.email_confirmed_at !== "") {
+      const { data: dataAdmintable, error: errorAdmintable } = await supabase
+        .from("admins")
+        .insert([{ user_id: authData.user.id, is_admin: false }]);
 
-      if (profileError) throw profileError;
+      if (errorAdmintable) throw errorAdmintable;
     }
-    console.log("authData", authData);
+
+    // 2. Сохранение профиля в отдельной таблице (если нужно)
+    // if (authData.user) {
+    //   const { error: profileError } = await supabase.from("profiles").insert([
+    //     {
+    //       id: authData.user.id,
+    //       email: authData.user.email,
+    //       first_name: firstName,
+    //       last_name: lastName,
+    //       created_at: new Date().toISOString(),
+    //     },
+    //   ]);
+
+    //   if (profileError) throw profileError;
+    // }
+    // console.log("authData", authData);
     res.status(200).json(authData);
   } catch (e) {
     res.status(500).json({ error: e.message });

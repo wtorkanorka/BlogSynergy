@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let lastTime = 0;
-    const animationSpeed = 0.2; // Скорость вращения
+    const animationSpeed = 0.3; // Скорость вращения
 
     const animate = (time: number) => {
       if (!lastTime) lastTime = time;
@@ -25,7 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, []);
 
   const calculatePosition = (offset: number) => {
-    const radius = 50;
+    const radius = 40;
     const currentAngle = (angle + offset) % 360;
     const rad = (currentAngle * Math.PI) / 180;
     return {
